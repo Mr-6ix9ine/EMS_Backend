@@ -3,12 +3,10 @@ package com.event.entity;
 
 
 import jakarta.persistence.*;
-import lombok.*;
+
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Table(name = "users")
 public class User {
 

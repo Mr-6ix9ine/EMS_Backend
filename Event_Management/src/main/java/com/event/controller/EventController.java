@@ -2,9 +2,8 @@ package com.event.controller;
 
 
 import com.event.entity.Event;
-import com.event.service.EventService;
+import com.event.service.EventServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +14,13 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/events")
-@CrossOrigin(origins = "http://localhost:3000")
 public class EventController {
 
-    private final EventService eventService;
+    private final EventServiceImpl eventService;
 
     // Constructor injection for EventService
     @Autowired
-    public EventController(EventService eventService) {
+    public EventController(EventServiceImpl eventService) {
         this.eventService = eventService;
     }
     @PostMapping
@@ -77,13 +75,6 @@ public class EventController {
     }
 
 
-//    @GetMapping("/search")
-//    public ResponseEntity<List<Event>> searchEvents(
-//            @RequestParam(required = false) String category,
-//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-//            @RequestParam(required = false) String location) {
-//        List<Event> events = eventService.searchAndFilterEvents(category, date, location);
-//        return new ResponseEntity<>(events, HttpStatus.OK);
-//    }
+
 }
 

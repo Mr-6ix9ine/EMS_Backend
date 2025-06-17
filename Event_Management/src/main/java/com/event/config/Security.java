@@ -14,7 +14,12 @@ public class Security {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/register", "/api/users/login","/api/events","/api/events/*","/api/tickets","/api/tickets/*","/api/tickets/*/cancel").permitAll()
+                        .requestMatchers("/api/users/register", "/api/users/login","/api/events","/api/events/*"
+                                ,"/api/tickets","/api/tickets/*","/api/tickets/user/*","/api/tickets/*/cancel","/api/notifications",
+                                "/api/notifications/*","/api/feedback",
+                                "/api/feedback/*","/api/feedback/event/*",
+                                "/api/feedback/user/*",
+                                "/api/feedback/eventRating/*","/api/feedback/event-rating/*").permitAll()
                         .anyRequest().authenticated()
                 );
 

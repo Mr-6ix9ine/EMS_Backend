@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 @Entity
-public class Event {
+@Table(name = "event")
+public class  Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventID;
@@ -12,7 +13,6 @@ public class Event {
     private String category;
     private String location;
     private LocalDate date;
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd")
     private String organizerID;
 
     public Long getEventID() {
