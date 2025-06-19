@@ -3,7 +3,10 @@ package com.event.controller;
 import com.event.entity.Notification;
 import com.event.service.NotificationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -14,12 +17,20 @@ public class NotificationController {
     private NotificationServiceImpl notificationService;
 
     @PostMapping
-    public Notification createNotification(@RequestParam Long userId, @RequestParam Long eventId, @RequestParam String message) {
-        return notificationService.sendNotification(userId, eventId, message);
+    public ResponseEntity<Notification> createNotification(
+            @RequestParam Long userId,
+            @RequestParam Long eventId,
+            @RequestParam String message) {
+        Notification notification = notificationService.sendNotification(userId, eventId, message);
+        return new ResponseEntity<>(notification, HttpStatus.CREATED); // 201 Created
     }
 
     @GetMapping("/{userId}")
-    public List<Notification> getNotifications(@PathVariable Long userId) {
-        return notificationService.getUserNotifications(userId);
+    public ResponseEntity<List<Notification>> getNotifications(@PathVariable Long userId) {
+        List<Notification> notifications = notificationService.getUserNotifications(userId);
+        if (notifications.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content
+        }
+        return new ResponseEntity<>(notifications, HttpStatus.OK); // 200 OK
     }
 }

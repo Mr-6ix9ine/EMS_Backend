@@ -3,6 +3,8 @@ package com.event.service;
 import com.event.entity.Feedback;
 import com.event.entity.Event;
 import com.event.entity.User;
+import com.event.exception.EventNotFoundException;
+import com.event.exception.UserNotFoundException;
 import com.event.repo.FeedbackRepository;
 import com.event.repo.EventRepository;
 import com.event.repo.UserRepository;
@@ -13,23 +15,26 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class FeedbackServiceImpl implements FeedbackService  {
-
+public class FeedbackServiceImpl implements FeedbackService {
 
     private final FeedbackRepository feedbackRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
     @Autowired
-    public FeedbackServiceImpl(FeedbackRepository feedbackRepository, UserRepository userRepository, EventRepository eventRepository) {
+    public FeedbackServiceImpl(FeedbackRepository feedbackRepository,
+                               UserRepository userRepository,
+                               EventRepository eventRepository) {
         this.feedbackRepository = feedbackRepository;
         this.userRepository = userRepository;
         this.eventRepository = eventRepository;
     }
 
     public Feedback submitFeedback(Long userId, Long eventId, int rating, String comments) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        Event event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotFoundException(eventId));
 
         Feedback feedback = new Feedback();
         feedback.setUser(user);

@@ -7,10 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
-
-//Repository interface for Event entity.
-
-@Repository // Marks this interface as a Spring Data repository
+@Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
 
 
@@ -21,7 +18,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByDate(LocalDate date);
 
 //    List<Event> findByDateAndLocation(LocalDate date, String location);
-//
 //    List<Event> findByCategoryAndDateAndLocation(String category, LocalDate date, String location);
 }
 

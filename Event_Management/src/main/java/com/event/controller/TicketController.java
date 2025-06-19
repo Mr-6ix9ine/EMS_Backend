@@ -9,10 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/tickets") // Base URL for ticket-related endpoints
+@RequestMapping("/api/tickets")
 public class TicketController {
 
     private final TicketServiceImpl ticketService;
@@ -24,57 +23,38 @@ public class TicketController {
 
 
     @PostMapping("/book")
-    public ResponseEntity<?> bookTicket(@RequestBody Map<String, Long> bookingRequest) {
+    public ResponseEntity<Ticket> bookTicket(@RequestBody Map<String, Long> bookingRequest) {
         Long eventId = bookingRequest.get("eventId");
         Long userId = bookingRequest.get("userId");
 
         if (eventId == null || userId == null) {
-            return new ResponseEntity<>("Event ID and User ID are required for booking.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        try {
-            Ticket bookedTicket = ticketService.bookTicket(eventId, userId);
-            return new ResponseEntity<>(bookedTicket, HttpStatus.CREATED); // 201 Created
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); // 404 Not Found
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error booking ticket: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); // 500 Internal Server Error
-        }
+        Ticket bookedTicket = ticketService.bookTicket(eventId, userId);
+        return new ResponseEntity<>(bookedTicket, HttpStatus.CREATED); // 201
     }
 
 
     @GetMapping("/{ticketId}")
     public ResponseEntity<Ticket> getTicketById(@PathVariable Long ticketId) {
-        return ticketService.getTicketById(ticketId)
-                .map(ticket -> new ResponseEntity<>(ticket, HttpStatus.OK)) // 200 OK
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND)); // 404 Not Found
+        Ticket ticket = ticketService.getTicketById(ticketId);
+        return new ResponseEntity<>(ticket, HttpStatus.OK); // 200
     }
-
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Ticket>> getTicketsByUserId(@PathVariable Long userId) {
         List<Ticket> tickets = ticketService.getTicketsByUserId(userId);
         if (tickets.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content, or 404 Not Found if you prefer
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204
         }
-        return new ResponseEntity<>(tickets, HttpStatus.OK); // 200 OK
+        return new ResponseEntity<>(tickets, HttpStatus.OK); // 200
     }
 
-
-    @PatchMapping("/{ticketId}/cancel") // PATCH is suitable for partial updates (changing status)
-    public ResponseEntity<?> cancelTicket(@PathVariable Long ticketId) {
-        try {
-            Optional<Ticket> canceledTicket = ticketService.cancelTicket(ticketId);
-            if (canceledTicket.isPresent()) {
-                return new ResponseEntity<>(canceledTicket.get(), HttpStatus.OK); // 200 OK
-            } else {
-                return new ResponseEntity<>("Ticket not found or already canceled/invalid status for cancellation.", HttpStatus.BAD_REQUEST); // 400 Bad Request
-            }
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND); // 404 Not Found
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error canceling ticket: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR); // 500 Internal Server Error
-        }
+    @PatchMapping("/{ticketId}/cancel")
+    public ResponseEntity<Ticket> cancelTicket(@PathVariable Long ticketId) {
+        Ticket canceledTicket = ticketService.cancelTicket(ticketId);
+        return new ResponseEntity<>(canceledTicket, HttpStatus.OK); // 200
     }
 
 
@@ -84,6 +64,6 @@ public class TicketController {
         if (tickets.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(tickets, HttpStatus.OK);
+        return new ResponseEntity<>(tickets, HttpStatus.OK); // 200
     }
 }

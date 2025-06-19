@@ -16,17 +16,14 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         User savedUser = userService.register(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED); // 201
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User loginData) {
+    public ResponseEntity<User> loginUser(@RequestBody User loginData) {
         User user = userService.login(loginData.getEmail(), loginData.getPassword());
-        if (user != null) {
-            return ResponseEntity.ok(user); // 200
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Invalid credentials"); // 401
-        }
+        return ResponseEntity.ok(user);
     }
 }
+
+
