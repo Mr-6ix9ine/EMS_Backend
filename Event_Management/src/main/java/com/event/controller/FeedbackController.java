@@ -13,8 +13,11 @@ import java.util.List;
 @RequestMapping("/api/feedback")
 public class FeedbackController {
 
+    private  final FeedbackServiceImpl feedbackService;
     @Autowired
-    private FeedbackServiceImpl feedbackService;
+    public FeedbackController(FeedbackServiceImpl feedbackService) {
+        this.feedbackService = feedbackService;
+    }
 
     @PostMapping
     public ResponseEntity<Feedback> submitFeedback(@RequestParam Long userId,

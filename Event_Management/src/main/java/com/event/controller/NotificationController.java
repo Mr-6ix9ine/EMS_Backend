@@ -13,8 +13,13 @@ import java.util.List;
 @RequestMapping("/api/notifications")
 public class NotificationController {
 
+
+    private final NotificationServiceImpl notificationService;
+
     @Autowired
-    private NotificationServiceImpl notificationService;
+    public NotificationController(NotificationServiceImpl notificationService) {
+        this.notificationService = notificationService;
+    }
 
     @PostMapping
     public ResponseEntity<Notification> createNotification(
