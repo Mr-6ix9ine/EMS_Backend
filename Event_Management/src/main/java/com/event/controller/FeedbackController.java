@@ -1,6 +1,7 @@
 package com.event.controller;
 
 import com.event.entity.Feedback;
+import com.event.service.FeedbackService;
 import com.event.service.FeedbackServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,9 +14,9 @@ import java.util.List;
 @RequestMapping("/api/feedback")
 public class FeedbackController {
 
-    private  final FeedbackServiceImpl feedbackService;
+    private  final FeedbackService feedbackService;
     @Autowired
-    public FeedbackController(FeedbackServiceImpl feedbackService) {
+    public FeedbackController(FeedbackService feedbackService) {
         this.feedbackService = feedbackService;
     }
 

@@ -1,6 +1,7 @@
 package com.event.controller;
 
 import com.event.entity.Ticket;
+import com.event.service.TicketService;
 import com.event.service.TicketServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +15,10 @@ import java.util.Map;
 @RequestMapping("/api/tickets")
 public class TicketController {
 
-    private final TicketServiceImpl ticketService;
+    private final TicketService ticketService;
 
     @Autowired
-    public TicketController(TicketServiceImpl ticketService) {
+    public TicketController(TicketService ticketService) {
         this.ticketService = ticketService;
     }
 

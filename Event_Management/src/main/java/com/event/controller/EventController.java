@@ -1,6 +1,7 @@
 package com.event.controller;
 
 import com.event.entity.Event;
+import com.event.service.EventService;
 import com.event.service.EventServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +15,10 @@ import java.util.List;
 @RequestMapping("/api/events")
 public class EventController {
 
-    private final EventServiceImpl eventService;
+    private final EventService eventService;
 
     @Autowired
-    public EventController(EventServiceImpl eventService) {
+    public EventController(EventService eventService) {
         this.eventService = eventService;
     }
 

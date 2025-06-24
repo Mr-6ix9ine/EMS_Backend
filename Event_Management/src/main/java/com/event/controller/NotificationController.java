@@ -1,6 +1,7 @@
 package com.event.controller;
 
 import com.event.entity.Notification;
+import com.event.service.NotificationService;
 import com.event.service.NotificationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +15,10 @@ import java.util.List;
 public class NotificationController {
 
 
-    private final NotificationServiceImpl notificationService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public NotificationController(NotificationServiceImpl notificationService) {
+    public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 
