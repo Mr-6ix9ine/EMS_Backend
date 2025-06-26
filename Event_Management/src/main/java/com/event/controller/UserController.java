@@ -1,34 +1,35 @@
 package com.event.controller;
+import com.event.dto.LoginRequest;
 import com.event.entity.User;
+import com.event.security.JwtUtil;
 import com.event.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-
-
-    private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired private UserService userService;
+    @Autowired private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User savedUser = userService.register(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
+    public ResponseEntity<User> register(@RequestBody User user) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(user));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> loginUser(@RequestBody User loginData) {
-        User user = userService.login(loginData.getEmail(), loginData.getPassword());
-        return ResponseEntity.ok(user);
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest request) {
+        User user = userService.login(request.getEmail(), request.getPassword());
+        String token = jwtUtil.generateToken(user.getEmail());
+
+        Map<String, String> response = Map.of("token", token, "email", user.getEmail());
+        return ResponseEntity.ok(response);
     }
 }
+
 
 
