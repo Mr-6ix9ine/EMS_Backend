@@ -27,10 +27,16 @@ public class SecurityConfig {
         return http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                     // Public endpoints
-                    .requestMatchers("/api/users/**").permitAll()
-
+                    .requestMatchers("/api/users/**","/api/admin/login")
+                            .permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/events",
+                                "/api/events/{id}",
+                                "/api/events/date",
+                                "/api/events/location",
+                                "/api/events/category").permitAll()
                     // Events: only admin
-                    .requestMatchers("/api/events/**").access((authContext, context) -> {
+                    .requestMatchers("/api/events/**","/api/events/event/**").access((authContext, context) -> {
                         String email = authContext.get().getName();
                         return new AuthorizationDecision(email.equals(adminEmail));
                     })
@@ -42,12 +48,14 @@ public class SecurityConfig {
                                 "/v3/api-docs.yaml"
                         ).permitAll()
 
-                    // Notifications
-                    .requestMatchers(HttpMethod.POST, "/api/notifications/**").access((authContext, context) -> {
-                        String email = authContext.get().getName();
-                        return new AuthorizationDecision(email.equals(adminEmail));
-                    })
-                    .requestMatchers(HttpMethod.GET, "/api/notifications/**").authenticated()
+                                // Only admin can POST notifications
+                                .requestMatchers(HttpMethod.POST, "/api/notifications/**").access((authContext, context) -> {
+                                    String email = authContext.get().getName();
+                                    return new AuthorizationDecision(email.equals(adminEmail));
+                                })
+
+// Authenticated users can GET their own notifications
+                                .requestMatchers(HttpMethod.GET, "/api/notifications/alerts/**").authenticated()
 
                     // Default: require auth
                     .anyRequest().authenticated()

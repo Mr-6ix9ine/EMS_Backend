@@ -22,7 +22,7 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @PostMapping
+    @PostMapping("/event")
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
         Event createdEvent = eventService.createEvent(event);
         return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
@@ -39,13 +39,13 @@ public class EventController {
         return ResponseEntity.ok(eventService.getAllEvents());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/event/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event eventDetails) {
         Event updatedEvent = eventService.updateEvent(id, eventDetails);
         return ResponseEntity.ok(updatedEvent);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/event/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         eventService.deleteEvent(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

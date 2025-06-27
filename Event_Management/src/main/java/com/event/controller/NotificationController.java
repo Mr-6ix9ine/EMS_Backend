@@ -22,7 +22,7 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-    @PostMapping
+    @PostMapping("/notification")
     public ResponseEntity<Notification> createNotification(
             @RequestParam Long userId,
             @RequestParam Long eventId,
@@ -31,7 +31,7 @@ public class NotificationController {
         return new ResponseEntity<>(notification, HttpStatus.CREATED); // 201 Created
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("alerts/{userId}")
     public ResponseEntity<List<Notification>> getNotifications(@PathVariable Long userId) {
         List<Notification> notifications = notificationService.getUserNotifications(userId);
         if (notifications.isEmpty()) {
