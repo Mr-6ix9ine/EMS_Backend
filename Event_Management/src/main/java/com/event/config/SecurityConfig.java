@@ -29,12 +29,18 @@ public class SecurityConfig {
                     // Public endpoints
                     .requestMatchers("/api/users/**","/api/admin/login")
                             .permitAll()
+                            .requestMatchers("/api/tickets/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/api/feedback/**").permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/events",
                                 "/api/events/{id}",
                                 "/api/events/date",
                                 "/api/events/location",
-                                "/api/events/category").permitAll()
+                                "/api/events/category",
+                                "/api/feedback/event/**",
+                                "/api/feedback/user/**",
+                                "/api/feedback/event-rating/**"
+                        		).permitAll()
                     // Events: only admin
                     .requestMatchers("/api/events/**","/api/events/event/**").access((authContext, context) -> {
                         String email = authContext.get().getName();
