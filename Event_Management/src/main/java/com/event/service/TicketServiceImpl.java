@@ -53,9 +53,11 @@ public class TicketServiceImpl implements TicketService {
     }
 
     public List<Ticket> getTicketsByUserId(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
         return ticketRepository.findByUser_Id(userId);
     }
-
     @Transactional
     public Ticket cancelTicket(Long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId)

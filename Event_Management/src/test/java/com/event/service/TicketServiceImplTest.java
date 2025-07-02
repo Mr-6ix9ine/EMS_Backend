@@ -122,6 +122,7 @@ class TicketServiceImplTest {
 
     @Test
     void testGetTicketsByUserId() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(ticketRepository.findByUser_Id(1L)).thenReturn(List.of(ticket));
 
         List<Ticket> tickets = ticketService.getTicketsByUserId(1L);
@@ -129,9 +130,9 @@ class TicketServiceImplTest {
         assertThat(tickets).hasSize(1);
         assertThat(tickets.get(0).getUser().getId()).isEqualTo(1L);
 
+        verify(userRepository).findById(1L);
         verify(ticketRepository).findByUser_Id(1L);
     }
-
     @Test
     void testCancelTicket() {
         when(ticketRepository.findById(1L)).thenReturn(Optional.of(ticket));

@@ -2,6 +2,9 @@ package com.event.service;
 
 import com.event.entity.Event;
 import com.event.exception.EventNotFoundException;
+import com.event.exception.EventCategoryNotFoundException;
+import com.event.exception.EventDateNotFoundException;
+import com.event.exception.EventLocationNotFoundException;
 import com.event.repo.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,15 +32,27 @@ public class EventServiceImpl implements EventService {
     }
 
     public List<Event> findByCategory(String category) {
-        return eventRepository.findByCategory(category);
+        List<Event> events = eventRepository.findByCategory(category);
+        if (events.isEmpty()) {
+            throw new EventCategoryNotFoundException(category);
+        }
+        return events;
     }
 
     public List<Event> findByLocation(String location) {
-        return eventRepository.findByLocation(location);
+        List<Event> events = eventRepository.findByLocation(location);
+        if (events.isEmpty()) {
+            throw new EventLocationNotFoundException(location);
+        }
+        return events;
     }
 
     public List<Event> findByDate(LocalDate date) {
-        return eventRepository.findByDate(date);
+        List<Event> events = eventRepository.findByDate(date);
+        if (events.isEmpty()) {
+            throw new EventDateNotFoundException(date);
+        }
+        return events;
     }
 
     public List<Event> getAllEvents() {
@@ -57,10 +72,11 @@ public class EventServiceImpl implements EventService {
         return eventRepository.save(existingEvent);
     }
 
-    public void deleteEvent(Long eventID) {
+    public String deleteEvent(Long eventID) {
         if (!eventRepository.existsById(eventID)) {
             throw new EventNotFoundException(eventID);
         }
         eventRepository.deleteById(eventID);
+        return "Event with ID " + eventID + " has been successfully deleted.";
     }
 }

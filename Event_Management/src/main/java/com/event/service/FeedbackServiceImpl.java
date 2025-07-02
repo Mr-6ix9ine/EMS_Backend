@@ -48,15 +48,24 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     public List<Feedback> getEventFeedback(Long eventId) {
+        eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotFoundException(eventId));
+
         return feedbackRepository.findByEventEventID(eventId);
     }
-
     public List<Feedback> getUserFeedback(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
         return feedbackRepository.findByUserId(userId);
     }
 
     public double calculateAverageRating(Long eventId) {
+        eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotFoundException(eventId));
+
         List<Feedback> feedbackList = feedbackRepository.findByEventEventID(eventId);
         return feedbackList.stream().mapToInt(Feedback::getRating).average().orElse(0.0);
     }
+
 }

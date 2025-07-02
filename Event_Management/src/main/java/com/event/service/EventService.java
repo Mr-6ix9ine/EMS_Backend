@@ -21,5 +21,5 @@ public interface EventService {
 
     Event updateEvent(Long eventID, Event eventDetails); // throws EventNotFoundException
 
-    void deleteEvent(Long eventID); // throws EventNotFoundException
+    String deleteEvent(Long eventID); // throws EventNotFoundException
 }

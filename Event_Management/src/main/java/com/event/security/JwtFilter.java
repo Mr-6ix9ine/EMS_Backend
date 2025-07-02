@@ -1,11 +1,11 @@
 package com.event.security;
-
 import com.event.repo.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtUtil jwtUtil;
-    @Autowired private UserRepository userRepository;
+
+    @Value("${admin.email}")
+    private String adminEmail;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -31,12 +36,19 @@ public class JwtFilter extends OncePerRequestFilter {
             String token = header.substring(7);
             String email = jwtUtil.extractEmail(token);
 
-            userRepository.findByEmail(email).ifPresent(user -> {
+            if (email.equals(adminEmail)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(email, null, List.of());
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-            });
+            } else {
+                userRepository.findByEmail(email).ifPresent(user -> {
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(email, null, List.of());
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                });
+            }
         }
+
         chain.doFilter(request, response);
     }
 }

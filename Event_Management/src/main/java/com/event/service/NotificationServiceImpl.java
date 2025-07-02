@@ -49,6 +49,8 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     public List<Notification> getUserNotifications(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
         return notificationRepository.findByUser_Id(userId);
-    }
-}
+    }}

@@ -16,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -37,7 +39,7 @@ class FeedbackControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private FeedbackService feedbackService;
 
     private Feedback feedback;
@@ -81,6 +83,7 @@ class FeedbackControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com")
     void testGetEventFeedback() throws Exception {
         List<Feedback> feedbackList = Arrays.asList(feedback);
         when(feedbackService.getEventFeedback(anyLong())).thenReturn(feedbackList);
@@ -107,6 +110,7 @@ class FeedbackControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin@example.com")
     void testGetAverageRating() throws Exception {
         when(feedbackService.calculateAverageRating(anyLong())).thenReturn(4.5);
 

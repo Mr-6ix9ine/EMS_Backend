@@ -27,6 +27,21 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleEventNotFound(EventNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND); // 404
     }
+    @ExceptionHandler(EventCategoryNotFoundException.class)
+    public ResponseEntity<String> handleCategoryNotFound(EventCategoryNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EventLocationNotFoundException.class)
+    public ResponseEntity<String> handleLocationNotFound(EventLocationNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EventDateNotFoundException.class)
+    public ResponseEntity<String> handleDateNotFound(EventDateNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
 
     @ExceptionHandler(TicketNotFoundException.class)
     public ResponseEntity<String> handleTicketNotFound(TicketNotFoundException ex) {

@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class) // ✅ PURE UNIT TEST
+@ExtendWith(MockitoExtension.class)
 class EventServiceImplTest {
 
     @Mock

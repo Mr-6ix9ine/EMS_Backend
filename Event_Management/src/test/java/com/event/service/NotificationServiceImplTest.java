@@ -107,6 +107,7 @@ class NotificationServiceImplTest {
 
     @Test
     void testGetUserNotifications() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(notificationRepository.findByUser_Id(1L)).thenReturn(List.of(notification));
 
         List<Notification> notifications = notificationService.getUserNotifications(1L);
@@ -115,6 +116,7 @@ class NotificationServiceImplTest {
         assertThat(notifications.get(0).getMessage()).isEqualTo("Test Notification");
         assertThat(notifications.get(0).getUser().getId()).isEqualTo(1L);
 
+        verify(userRepository).findById(1L);
         verify(notificationRepository).findByUser_Id(1L);
     }
 }
